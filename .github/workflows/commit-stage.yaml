@@ -72,7 +72,7 @@ jobs:
         run: echo "name=$COVERAGE_ARTIFATC_NAME-$GITHUB_SHA" >> $GITHUB_OUTPUT
 
       - name: Save coverage reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.coverage-artifact-name.outputs.name }}
           path: ${{ env.COVERAGE_CLOVER_UNIT_FILENAME }}
@@ -82,7 +82,7 @@ jobs:
         run: echo "name=$UNIT_TEST_DOC_ARTIFATC_NAME-$GITHUB_SHA" >> $GITHUB_OUTPUT
 
       - name: Save test doc reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.test-doc-artifact-name.outputs.name }}
           path: ${{ env.UNIT_TEST_DOC_FILENAME }}
