@@ -1,7 +1,12 @@
 name: Commit stage
 
 on:
-  push:
+  workflow_call:
+    # Map the workflow outputs to job outputs
+    inputs:
+      triggering-sha:
+        required: true
+        type: string
 
 env:
   PHP_EXTENSIONS: ctype, iconv, json, curl, gd, intl, opcache, openssl, mbstring, mysql, pdo_sqlite
@@ -10,6 +15,7 @@ env:
   COVERAGE_CLOVER_UNIT_FILENAME: 'coverage-unit-test-clover.xml'
   UNIT_TEST_DOC_ARTIFATC_NAME: 'Docs-unit-test-on-SHA'
   UNIT_TEST_DOC_FILENAME: 'doc-unit-test.txt'
+
 
 
 jobs:
@@ -23,10 +29,28 @@ jobs:
           - '8.0'
       fail-fast: true
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout on SHA-${{ inputs.triggering-sha }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.triggering-sha }}
+
+      - name: Setup php extension cache environment
+        id: cache-php-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.cache-php-extensions.outputs.dir }}
+          key: ${{ steps.cache-php-extensions.outputs.key }}
+          restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -64,7 +88,7 @@ jobs:
           path: ${{ env.UNIT_TEST_DOC_FILENAME }}
 
 
-  lint-composer:
+  checks-composer:
     name: Validate Composer
     runs-on: ubuntu-20.04
     timeout-minutes: 2
@@ -74,11 +98,28 @@ jobs:
           - '8.0'
       fail-fast: true
     steps:
-      - name: Checkout
+      - name: Checkout on SHA-${{ inputs.triggering-sha }}
         uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.triggering-sha }}
+
+      - name: Setup php extension cache environment
+        id: cache-php-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.cache-php-extensions.outputs.dir }}
+          key: ${{ steps.cache-php-extensions.outputs.key }}
+          restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.15.0
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -88,7 +129,7 @@ jobs:
 
       - name: Install Composer dependencies
         run: |
-          composer install --prefer-dist --no-progress --no-scripts --ansi 
+          composer install --prefer-dist --no-progress --no-scripts --ansi
 
       - name: Run composer validate
         run: |
@@ -109,11 +150,28 @@ jobs:
           - '8.0'
       fail-fast: true
     steps:
-      - name: Checkout
+      - name: Checkout on SHA-${{ inputs.triggering-sha }}
         uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.triggering-sha }}
+
+      - name: Setup php extension cache environment
+        id: cache-php-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.cache-php-extensions.outputs.dir }}
+          key: ${{ steps.cache-php-extensions.outputs.key }}
+          restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.15.0
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -144,10 +202,28 @@ jobs:
           - '8.0'
       fail-fast: true
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout on SHA-${{ inputs.triggering-sha }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.triggering-sha }}
+
+      - name: Setup php extension cache environment
+        id: cache-php-extensions
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.cache-php-extensions.outputs.dir }}
+          key: ${{ steps.cache-php-extensions.outputs.key }}
+          restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -173,8 +249,10 @@ jobs:
           - '8.0'
       fail-fast: true
     steps:
-      - name: Checkout
+      - name: Checkout on SHA-${{ inputs.triggering-sha }}
         uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
         id: cache-php-extensions
@@ -192,7 +270,7 @@ jobs:
           restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.15.0
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -202,7 +280,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT "
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
         uses: actions/cache@v3
@@ -223,4 +301,3 @@ jobs:
         run: |
           ./bin/console debug:container
           ./vendor/bin/rector process --dry-run --ansi
-
