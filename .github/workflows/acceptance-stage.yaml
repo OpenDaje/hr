@@ -9,10 +9,10 @@ on:
         type: string
 
 env:
-  GITHUB_CACHE_PHP_EXTENSION: '1'
+  USE_COMPOSER_CACHE: '1'
+  USE_PHP_EXTENSION_CACHE: '1'
   PHP_EXTENSIONS: ctype, iconv, json, curl, gd, intl, opcache, openssl, mbstring, mysql, pdo_sqlite
   PHP_EXTENSIONS_CACHE_KEY: cache-php-extensions-v1
-  GITHUB_CACHE_COMPOSER_ENABLED: '1'
   COVERAGE_INTEGRATION_ARTIFATC_NAME: 'Coverage-reports-integration-on-SHA'
   COVERAGE_FUNCTIONAL_ARTIFATC_NAME: 'Coverage-reports-functional-on-SHA'
   COVERAGE_CLOVER_INTEGRATION_FILENAME: 'coverage-integration-test-clover.xml'
@@ -26,7 +26,7 @@ env:
 
 jobs:
   app-preconditions-checks:
-    name: App preconditions checks
+    name: App preconditions checks (php-${{ matrix.php }})
     runs-on: ubuntu-20.04
     timeout-minutes: 5
     services:
@@ -47,6 +47,12 @@ jobs:
       matrix:
         php:
           - '8.0'
+        is-php-experimental: [false]
+        generate-coverage-report: [true]
+        include:
+          - php: '8.1'
+            is-php-experimental: true
+            generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
@@ -57,7 +63,8 @@ jobs:
 #      - name: info triggering workflow - commit message
 #        run: echo commit message from triggering workflow '${{ github.event.workflow_run.head_commit.message }}'
 
-      - name: Setup cache environment
+      - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -65,7 +72,8 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
-      - name: Cache extensions
+      - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -81,16 +89,20 @@ jobs:
           coverage: none
           tools: composer
 
-      - name: Get Composer Cache Directory
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --ansi --no-scripts
@@ -128,7 +140,7 @@ jobs:
 
 
   integration-test:
-    name: Integration tests
+    name: Integration tests (php-${{ matrix.php }})
     runs-on: ubuntu-20.04
     needs:
       - app-preconditions-checks
@@ -151,6 +163,12 @@ jobs:
       matrix:
         php:
           - '8.0'
+        is-php-experimental: [false]
+        generate-coverage-report: [true]
+        include:
+          - php: '8.1'
+            is-php-experimental: true
+            generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
@@ -161,7 +179,8 @@ jobs:
 #      - name: info triggering workflow - commit message
 #        run: echo commit message from triggering workflow '${{ github.event.workflow_run.head_commit.message }}'
 
-      - name: Setup cache environment
+      - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -169,7 +188,8 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
-      - name: Cache extensions
+      - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -185,16 +205,20 @@ jobs:
           coverage: pcov
           tools: symfony
 
-      - name: Get Composer Cache Directory
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --ansi --no-scripts
@@ -243,7 +267,7 @@ jobs:
 
 
   functional-test:
-    name: Functional tests
+    name: Functional tests (php-${{ matrix.php }})
     runs-on: ubuntu-20.04
     needs:
       - app-preconditions-checks
@@ -268,6 +292,13 @@ jobs:
           - '8.0'
         node:
           - '16.x'
+        is-php-experimental: [ false ]
+        generate-coverage-report: [ true ]
+        include:
+          - php: '8.1'
+            node: '16.x'
+            is-php-experimental: true
+            generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
@@ -278,7 +309,8 @@ jobs:
 #      - name: info triggering workflow - commit message
 #        run: echo commit message from triggering workflow '${{ github.event.workflow_run.head_commit.message }}'
 
-      - name: Setup cache environment
+      - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -286,7 +318,8 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
-      - name: Cache extensions
+      - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -302,16 +335,20 @@ jobs:
           coverage: pcov
           tools: symfony
 
-      - name: Get Composer Cache Directory
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --ansi --no-scripts
@@ -388,7 +425,7 @@ jobs:
 
 
   behat-test:
-    name: Acceptance tests (behat)
+    name: Behat acceptance tests (php-${{ matrix.php }})
     runs-on: ubuntu-20.04
     needs:
       - app-preconditions-checks
@@ -413,6 +450,13 @@ jobs:
           - '8.0'
         node:
           - '16.x'
+        is-php-experimental: [ false ]
+        generate-coverage-report: [ true ]
+        include:
+          - php: '8.1'
+            node: '16.x'
+            is-php-experimental: true
+            generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
@@ -423,7 +467,8 @@ jobs:
 #      - name: info triggering workflow - commit message
 #        run: echo commit message from triggering workflow '${{ github.event.workflow_run.head_commit.message }}'
 
-      - name: Setup cache environment
+      - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -431,7 +476,8 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
-      - name: Cache extensions
+      - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -447,16 +493,20 @@ jobs:
           coverage: none
           tools: symfony
 
-      - name: Get Composer Cache Directory
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --ansi --no-scripts
