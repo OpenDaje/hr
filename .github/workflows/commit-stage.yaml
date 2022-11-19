@@ -9,6 +9,7 @@ on:
         type: string
 
 env:
+  USE_COMPOSER_CACHE: '1'
   PHP_EXTENSIONS: ctype, iconv, json, curl, gd, intl, opcache, openssl, mbstring, mysql, pdo_sqlite
   PHP_EXTENSIONS_CACHE_KEY: cache-php-extensions-v1
   COVERAGE_ARTIFATC_NAME: 'Coverage-reports-on-SHA'
@@ -63,6 +64,21 @@ jobs:
           extensions: ${{ env.PHP_EXTENSIONS }}
           ini-values: memory_limit=-1
           coverage: pcov
+
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install dependencies
         run: |
@@ -190,6 +206,21 @@ jobs:
           coverage: none
           tools: composer
 
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
       - name: Install Composer dependencies
         run: |
           composer install --prefer-dist --no-progress --ansi --no-scripts
@@ -241,6 +272,21 @@ jobs:
           ini-values: memory_limit=-1
           coverage: none
 
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
       - name: Install dependencies
         run: |
           composer install --prefer-dist --no-progress --ansi
@@ -289,17 +335,20 @@ jobs:
           coverage: none
           tools: composer
 
-      - name: Get Composer Cache Directory
+      - name: Set Composer Cache Directory
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache composer dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
+        if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-php${{ matrix.php }}-composer-
-        continue-on-error: true
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
         run: |
