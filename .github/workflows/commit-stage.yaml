@@ -10,6 +10,7 @@ on:
 
 env:
   USE_COMPOSER_CACHE: '1'
+  USE_PHP_EXTENSION_CACHE: '1'
   PHP_EXTENSIONS: ctype, iconv, json, curl, gd, intl, opcache, openssl, mbstring, mysql, pdo_sqlite
   PHP_EXTENSIONS_CACHE_KEY: cache-php-extensions-v1
   COVERAGE_ARTIFATC_NAME: 'Coverage-reports-on-SHA'
@@ -43,6 +44,7 @@ jobs:
           ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -51,6 +53,7 @@ jobs:
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
       - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -131,6 +134,7 @@ jobs:
           ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -139,6 +143,7 @@ jobs:
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
       - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -183,6 +188,7 @@ jobs:
           ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -191,6 +197,7 @@ jobs:
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
       - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -250,6 +257,7 @@ jobs:
           ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -258,6 +266,7 @@ jobs:
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
       - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
@@ -312,6 +321,7 @@ jobs:
           ref: ${{ inputs.triggering-sha }}
 
       - name: Setup php extension cache environment
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         id: cache-php-extensions
         uses: shivammathur/cache-extensions@v1
         with:
@@ -320,6 +330,7 @@ jobs:
           key: ${{ env.PHP_EXTENSIONS_CACHE_KEY }}
 
       - name: Cache PHP extensions
+        if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
         uses: actions/cache@v3
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
