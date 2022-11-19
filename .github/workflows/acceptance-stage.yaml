@@ -9,19 +9,21 @@ on:
         type: string
 
 env:
+  # GHA SETTINGS
   USE_COMPOSER_CACHE: '1'
   USE_PHP_EXTENSION_CACHE: '1'
+  # PHP SETTINGS
   PHP_EXTENSIONS: ctype, iconv, json, curl, gd, intl, opcache, openssl, mbstring, mysql, pdo_sqlite
   PHP_EXTENSIONS_CACHE_KEY: cache-php-extensions-v1
-  COVERAGE_INTEGRATION_ARTIFATC_NAME: 'Coverage-reports-integration-on-SHA'
-  COVERAGE_FUNCTIONAL_ARTIFATC_NAME: 'Coverage-reports-functional-on-SHA'
-  COVERAGE_CLOVER_INTEGRATION_FILENAME: 'coverage-integration-test-clover.xml'
-  COVERAGE_CLOVER_FUNCTIONAL_FILENAME: 'coverage-functional-test-clover.xml'
-  INTEGRATION_TEST_DOC_ARTIFATC_NAME: 'Docs-integration-test-on-SHA'
+  # ARTIFACTS SETTINGS
+  ARTIFATC_NAME_FOR_INTEGRATION_TEST_COVERAGE: 'Integration-test-coverage-reports-on-SHA'
+  INTEGRATION_TEST_CLOVER_FILENAME: 'coverage-integration-test-clover.xml'
+  ARTIFATC_NAME_FOR_INTEGRATION_TEST_DOC: 'Integration-test-docs-report-on-SHA'
   INTEGRATION_TEST_DOC_FILENAME: 'doc-integration-test.txt'
-  FUNCTIONAL_TEST_DOC_ARTIFATC_NAME: 'Docs-functional-test-on-SHA'
+  ARTIFATC_NAME_FOR_FUNCTIONAL_TEST_COVERAGE: 'Functional-test-coverage-reports-on-SHA'
+  FUNCTIONAL_TEST_CLOVER_FILENAME: 'coverage-functional-test-clover.xml'
+  ARTIFATC_NAME_FOR_FUNCTIONAL_TEST_DOC: 'Functional-test-docs-report-on-SHA'
   FUNCTIONAL_TEST_DOC_FILENAME: 'doc-functional-test.txt'
-
 
 
 jobs:
@@ -29,6 +31,7 @@ jobs:
     name: App preconditions checks (php-${{ matrix.php }})
     runs-on: ubuntu-20.04
     timeout-minutes: 5
+    continue-on-error: ${{ matrix.is-php-experimental }}
     services:
       pgsql:
         image: postgres:13-alpine
@@ -145,6 +148,7 @@ jobs:
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
+    continue-on-error: ${{ matrix.is-php-experimental }}
     services:
       pgsql:
         image: postgres:13-alpine
@@ -238,7 +242,7 @@ jobs:
       - name: Run only integration test
         run: |
           bin/phpunit --testsuite=integration --colors=always \
-          --coverage-clover $COVERAGE_CLOVER_INTEGRATION_FILENAME \
+          --coverage-clover $INTEGRATION_TEST_CLOVER_FILENAME \
           --testdox-text $INTEGRATION_TEST_DOC_FILENAME
         env:
           DATABASE_URL: postgresql://ci-db-user:ci-db-password@127.0.0.1:${{ job.services.pgsql.ports['5432'] }}/ci-db?serverVersion=13&charset=utf8
@@ -246,20 +250,24 @@ jobs:
           SYMFONY_DEPRECATIONS_HELPER: disabled
 
       - name: Get integration test coverage artifact name
+        if: ${{ matrix.generate-coverage-report }}
         id: integration-coverage-artifact-name
-        run: echo "name=$COVERAGE_INTEGRATION_ARTIFATC_NAME-$GITHUB_SHA" >> $GITHUB_OUTPUT
+        run: echo "name=$ARTIFATC_NAME_FOR_INTEGRATION_TEST_COVERAGE-$GITHUB_SHA" >> $GITHUB_OUTPUT
 
       - name: Save integration coverage reports
+        if: ${{ matrix.generate-coverage-report }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.integration-coverage-artifact-name.outputs.name }}
-          path: ${{ env.COVERAGE_CLOVER_INTEGRATION_FILENAME }}
+          path: ${{ env.INTEGRATION_TEST_CLOVER_FILENAME }}
 
       - name: Get integration test doc artifact name
+        if: ${{ matrix.generate-coverage-report }}
         id: integration-test-doc-artifact-name
-        run: echo "name=$INTEGRATION_TEST_DOC_ARTIFATC_NAME-$GITHUB_SHA"  >> $GITHUB_OUTPUT
+        run: echo "name=$ARTIFATC_NAME_FOR_INTEGRATION_TEST_DOC-$GITHUB_SHA"  >> $GITHUB_OUTPUT
 
       - name: Save test doc reports
+        if: ${{ matrix.generate-coverage-report }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.integration-test-doc-artifact-name.outputs.name }}
@@ -272,6 +280,7 @@ jobs:
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
+    continue-on-error: ${{ matrix.is-php-experimental }}
     services:
       pgsql:
         image: postgres:13-alpine
@@ -396,7 +405,7 @@ jobs:
       - name: Run functional testsuite
         run: |
           bin/phpunit --testsuite=functional --colors=always \
-          --coverage-clover $COVERAGE_CLOVER_FUNCTIONAL_FILENAME \
+          --coverage-clover $FUNCTIONAL_TEST_CLOVER_FILENAME \
           --testdox-text $FUNCTIONAL_TEST_DOC_FILENAME
         env:
           DATABASE_URL: postgresql://ci-db-user:ci-db-password@127.0.0.1:${{ job.services.pgsql.ports['5432'] }}/ci-db?serverVersion=13&charset=utf8
@@ -404,20 +413,24 @@ jobs:
           SYMFONY_DEPRECATIONS_HELPER: disabled
 
       - name: Get functional test coverage artifact name
+        if: ${{ matrix.generate-coverage-report }}
         id: functional-coverage-artifact-name
-        run: echo "name=$COVERAGE_FUNCTIONAL_ARTIFATC_NAME-$GITHUB_SHA" >> $GITHUB_OUTPUT
+        run: echo "name=$ARTIFATC_NAME_FOR_FUNCTIONAL_TEST_COVERAGE-$GITHUB_SHA" >> $GITHUB_OUTPUT
 
       - name: Save functional coverage reports
+        if: ${{ matrix.generate-coverage-report }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.functional-coverage-artifact-name.outputs.name }}
-          path: ${{ env.COVERAGE_CLOVER_FUNCTIONAL_FILENAME }}
+          path: ${{ env.FUNCTIONAL_TEST_CLOVER_FILENAME }}
 
       - name: Get functional test doc artifact name
+        if: ${{ matrix.generate-coverage-report }}
         id: functional-test-doc-artifact-name
-        run: echo "name=$FUNCTIONAL_TEST_DOC_ARTIFATC_NAME-$GITHUB_SHA" >> $GITHUB_OUTPUT
+        run: echo "name=$ARTIFATC_NAME_FOR_FUNCTIONAL_TEST_DOC-$GITHUB_SHA" >> $GITHUB_OUTPUT
 
       - name: Save test doc reports
+        if: ${{ matrix.generate-coverage-report }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.functional-test-doc-artifact-name.outputs.name }}
@@ -430,6 +443,7 @@ jobs:
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
+    continue-on-error: ${{ matrix.is-php-experimental }}
     services:
       pgsql:
         image: postgres:13-alpine
