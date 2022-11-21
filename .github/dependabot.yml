@@ -4,7 +4,7 @@ version: 2
 
 updates:
   - package-ecosystem: "composer"
-    target-branch: "5.4"
+    target-branch: "main"
     directory: "/"
     versioning-strategy: "increase-if-necessary"
     open-pull-requests-limit: 10
@@ -25,7 +25,7 @@ updates:
   # Tools dependecy track
   #
   - package-ecosystem: "composer"
-    target-branch: "5.4"
+    target-branch: "main"
     directory: "/tools/phpstan"
     versioning-strategy: "increase-if-necessary"
     open-pull-requests-limit: 5
@@ -40,7 +40,7 @@ updates:
       - "tool dependency"
 
   - package-ecosystem: "composer"
-    target-branch: "5.4"
+    target-branch: "main"
     directory: "/tools/ecs"
     versioning-strategy: "increase-if-necessary"
     open-pull-requests-limit: 5
@@ -55,7 +55,7 @@ updates:
       - "tool dependency"
 
   - package-ecosystem: "composer"
-    target-branch: "5.4"
+    target-branch: "main"
     directory: "/tools/rector"
     versioning-strategy: "increase-if-necessary"
     open-pull-requests-limit: 5
