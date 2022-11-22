@@ -9,7 +9,8 @@ parameters:
         - tests/
         - _iam/src/
         - _iam/tests/
-
+        - _hiring/src/
+        - _hiring/tests/
 
     checkMissingIterableValueType: false
 

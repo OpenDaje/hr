@@ -18,6 +18,8 @@ return static function (ECSConfig $ecsConfig): void {
         __DIR__ . '/tests',
         __DIR__ . '/_iam/src',
         __DIR__ . '/_iam/tests',
+        __DIR__ . '/_hiring/src',
+        __DIR__ . '/_hiring/tests',
         __DIR__ . '/ecs.php',
         __DIR__ . '/rector.php',
     ]);

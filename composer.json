@@ -77,13 +77,15 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "IdentityAccess\\": "_iam/src/"
+            "IdentityAccess\\": "_iam/src/",
+            "Hiring\\": "_hiring/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
-            "IdentityAccess\\Tests\\": "_iam/tests/"
+            "IdentityAccess\\Tests\\": "_iam/tests/",
+            "Hiring\\Tests\\": "_hiring/tests/"
         }
     },
     "minimum-stability": "stable",
