@@ -12,8 +12,8 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-        __DIR__ . '/srcIam/src',
-        __DIR__ . '/srcIam/tests',
+        __DIR__ . '/_iam/src',
+        __DIR__ . '/_iam/tests',
     ]);
 
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
