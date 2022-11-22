@@ -2,12 +2,6 @@
 /.vscode
 /workflow
 
-
-# --- REMOVE
-docker-compose*.yaml
-/docker
-todo.txt
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
