@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Hiring\Adapter\Persistence;
+
+use Ecotone\Modelling\Attribute\Repository;
+use Ecotone\Modelling\StandardRepository;
+use Hiring\Application\Employee;
+
+#[Repository]
+class InMemoryProductRepository implements StandardRepository
+{
+    private array $employees = [];
+
+    public function canHandle(string $aggregateClassName): bool
+    {
+        return $aggregateClassName === Employee::class;
+    }
+
+    public function findBy(string $aggregateClassName, array $identifiers): ?object
+    {
+        if (! \array_key_exists($identifiers["employeeId"], $this->employees)) {
+            return null;
+        }
+
+        return $this->employees[$identifiers["employeeId"]];
+    }
+
+    public function save(array $identifiers, object $aggregate, array $metadata, ?int $versionBeforeHandling): void
+    {
+        $this->employees[$identifiers["employeeId"]] = $aggregate;
+    }
+}

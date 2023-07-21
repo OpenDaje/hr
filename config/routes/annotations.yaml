@@ -9,3 +9,7 @@ kernel:
 iam_api_controllers:
   resource: ../../_iam/src/Adapter/Api/
   type: annotation
+
+hiring_api_controllers:
+  resource: ../../_hiring/src/Adapter/Api/
+  type: annotation
