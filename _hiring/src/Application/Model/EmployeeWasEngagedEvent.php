@@ -4,11 +4,9 @@ namespace Hiring\Application\Model;
 
 class EmployeeWasEngagedEvent
 {
-    private int $employeeId;
-
-    public function __construct(int $employeeId)
-    {
-        $this->employeeId = $employeeId;
+    public function __construct(
+        private int $employeeId
+    ) {
     }
 
     public function getEmployeeId(): int

@@ -14,16 +14,11 @@ class Employee
 {
     use WithAggregateEvents;
 
-    #[AggregateIdentifier]
-    private int $employeeId;
-
-    private string $name;
-
-    public function __construct(int $employeeId, string $name)
-    {
-        $this->employeeId = $employeeId;
-        $this->name = $name;
-
+    public function __construct(
+        #[AggregateIdentifier]
+        private int $employeeId,
+        private string $name
+    ) {
         $this->recordThat(new EmployeeWasEngagedEvent($employeeId));
     }
 

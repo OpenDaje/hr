@@ -9,15 +9,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class EmployeesLoopCommand extends Command
 {
-    /**
-     * @var EmployeesLoopQuickstart
-     */
-    private $ecotoneQuickstart;
+    protected static $defaultName = "ecotone:loop";
 
-    public function __construct(EmployeesLoopQuickstart $ecotoneQuickstart)
-    {
-        parent::__construct("ecotone:loop");
-        $this->ecotoneQuickstart = $ecotoneQuickstart;
+    public function __construct(
+        private EmployeesLoopQuickstart $ecotoneQuickstart
+    ) {
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

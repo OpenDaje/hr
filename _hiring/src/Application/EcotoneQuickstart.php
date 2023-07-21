@@ -10,14 +10,10 @@ use Hiring\Application\Model\GetEmployeeNameQuery;
 
 class EcotoneQuickstart
 {
-    private CommandBus $commandBus;
-
-    private QueryBus $queryBus;
-
-    public function __construct(CommandBus $commandBus, QueryBus $queryBus)
-    {
-        $this->commandBus = $commandBus;
-        $this->queryBus = $queryBus;
+    public function __construct(
+        private CommandBus $commandBus,
+        private QueryBus $queryBus
+    ) {
     }
 
     public function run(): void

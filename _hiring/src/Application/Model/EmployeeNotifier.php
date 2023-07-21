@@ -5,7 +5,6 @@ namespace Hiring\Application\Model;
 use Ecotone\Messaging\Attribute\Asynchronous;
 use Ecotone\Modelling\Attribute\EventHandler;
 
-
 class EmployeeNotifier
 {
     #[Asynchronous("employees")]

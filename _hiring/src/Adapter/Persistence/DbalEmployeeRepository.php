@@ -17,16 +17,14 @@ class DbalEmployeeRepository implements StandardRepository
 
     public const CONNECTION_DSN = 'sqlite:///var/db-prova.sqlite';
 
-    private Connection $connection; // 1
+    private Connection $connection; // 2
 
-    private Serializer $serializer; // 2
-
-    public function __construct(Serializer $serializer)
-    {
+    public function __construct(
+        private Serializer $serializer
+    ) {
         $this->connection = DriverManager::getConnection([
             'url' => self::CONNECTION_DSN,
         ]);
-        $this->serializer = $serializer;
     }
 
     public function canHandle(string $aggregateClassName): bool
@@ -58,7 +56,7 @@ SQL, [
     {
         $this->createSharedTableIfNeeded();
 
-        $aggregateClass = \get_class($aggregate);
+        $aggregateClass = $aggregate::class;
         // 5
         $data = $this->serializer->convertFromPHP($aggregate, MediaType::APPLICATION_JSON);
 

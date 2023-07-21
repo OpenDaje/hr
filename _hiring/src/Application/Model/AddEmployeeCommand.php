@@ -4,14 +4,10 @@ namespace Hiring\Application\Model;
 
 class AddEmployeeCommand
 {
-    private int $employeeId;
-
-    private string $name;
-
-    public function __construct(int $employeeId, string $name)
-    {
-        $this->employeeId = $employeeId;
-        $this->name = $name;
+    public function __construct(
+        private int $employeeId,
+        private string $name
+    ) {
     }
 
     public function getEmployeeId(): int
