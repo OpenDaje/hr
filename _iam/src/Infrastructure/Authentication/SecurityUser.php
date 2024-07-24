@@ -10,7 +10,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private function __construct(
         private string $password,
-        private string $email,
+        private readonly string $email,
         private array $roles = []
     ) {
     }

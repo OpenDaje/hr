@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class NewAccountController extends AbstractController
 {
     public function __construct(
-        private CommandBus $commandBus,
-        private UserPasswordHasherInterface $passwordHasher,
+        private readonly CommandBus $commandBus,
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 

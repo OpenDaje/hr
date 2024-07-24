@@ -26,6 +26,18 @@
     "dbrekelmans/bdi": {
         "version": "1.0"
     },
+    "doctrine/annotations": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "a2759dd6123694c8d901d0ec80006e044c2e6457"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
     "doctrine/cache": {
         "version": "2.2.0"
     },
@@ -333,9 +345,6 @@
     },
     "sebastian/version": {
         "version": "3.0.2"
-    },
-    "stella-maris/clock": {
-        "version": "0.1.4"
     },
     "symfony/browser-kit": {
         "version": "v5.4.2"

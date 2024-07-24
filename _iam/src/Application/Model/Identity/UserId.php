@@ -5,7 +5,7 @@ namespace IdentityAccess\Application\Model\Identity;
 class UserId implements \Stringable
 {
     private function __construct(
-        private string $identity
+        private readonly string $identity
     ) {
     }
 

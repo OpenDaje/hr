@@ -18,7 +18,7 @@ final class DemoContext implements Context
     private ?Response $response = null;
 
     public function __construct(
-        private KernelInterface $kernel
+        private readonly KernelInterface $kernel
     ) {
     }
 
