@@ -4,7 +4,7 @@
     "description": "HR management",
     "license": "MIT",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "1.11.99.*",
