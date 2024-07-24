@@ -22,7 +22,7 @@ updates:
         versions: ["6.x"]
 
   #
-  # Tools dependecy track
+  # Tools dependency track
   #
   - package-ecosystem: "composer"
     target-branch: "main"
