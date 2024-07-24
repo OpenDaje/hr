@@ -54,6 +54,9 @@ jobs:
         generate-coverage-report: [true]
         include:
           - php: '8.1'
+            is-php-experimental: false
+            generate-coverage-report: false
+          - php: '8.2'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
@@ -171,6 +174,9 @@ jobs:
         generate-coverage-report: [true]
         include:
           - php: '8.1'
+            is-php-experimental: false
+            generate-coverage-report: false
+          - php: '8.2'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
@@ -305,6 +311,10 @@ jobs:
         generate-coverage-report: [ true ]
         include:
           - php: '8.1'
+            node: '16.x'
+            is-php-experimental: false
+            generate-coverage-report: false
+          - php: '8.2'
             node: '16.x'
             is-php-experimental: true
             generate-coverage-report: false
@@ -468,6 +478,10 @@ jobs:
         generate-coverage-report: [ true ]
         include:
           - php: '8.1'
+            node: '16.x'
+            is-php-experimental: false
+            generate-coverage-report: false
+          - php: '8.2'
             node: '16.x'
             is-php-experimental: true
             generate-coverage-report: false
