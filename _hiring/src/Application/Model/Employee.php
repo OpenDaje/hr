@@ -15,9 +15,8 @@ class Employee
     use WithAggregateEvents;
 
     public function __construct(
-        #[AggregateIdentifier]
-        private int $employeeId,
-        private string $name
+        #[AggregateIdentifier]private readonly int $employeeId,
+        private readonly string $name
     ) {
         $this->recordThat(new EmployeeWasEngagedEvent($employeeId));
     }

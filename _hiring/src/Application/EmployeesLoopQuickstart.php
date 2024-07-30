@@ -10,8 +10,8 @@ use Hiring\Application\Model\AddEmployeeCommand;
 class EmployeesLoopQuickstart
 {
     public function __construct(
-        private CommandBus $commandBus,
-        private QueryBus $queryBus
+        private readonly CommandBus $commandBus,
+        private readonly QueryBus $queryBus
     ) {
     }
 

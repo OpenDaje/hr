@@ -12,7 +12,7 @@ class EcotoneQuickstartCommand extends Command
     protected static $defaultName = "ecotone:quickstart";
 
     public function __construct(
-        private EcotoneQuickstart $ecotoneQuickstart
+        private readonly EcotoneQuickstart $ecotoneQuickstart
     ) {
         parent::__construct();
     }

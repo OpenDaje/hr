@@ -12,7 +12,7 @@ class EmployeesLoopCommand extends Command
     protected static $defaultName = "ecotone:loop";
 
     public function __construct(
-        private EmployeesLoopQuickstart $ecotoneQuickstart
+        private readonly EmployeesLoopQuickstart $ecotoneQuickstart
     ) {
         parent::__construct();
     }

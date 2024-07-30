@@ -11,8 +11,8 @@ use Hiring\Application\Model\GetEmployeeNameQuery;
 class EcotoneQuickstart
 {
     public function __construct(
-        private CommandBus $commandBus,
-        private QueryBus $queryBus
+        private readonly CommandBus $commandBus,
+        private readonly QueryBus $queryBus
     ) {
     }
 

@@ -13,14 +13,14 @@ use Hiring\Application\Model\Employee;
 #[Repository]
 class DbalEmployeeRepository implements StandardRepository
 {
-    public const TABLE_NAME = "aggregate";
+    final public const TABLE_NAME = "aggregate";
 
-    public const CONNECTION_DSN = 'sqlite:///var/db-prova.sqlite';
+    final public const CONNECTION_DSN = 'sqlite:///var/db-prova.sqlite';
 
-    private Connection $connection; // 2
+    private readonly Connection $connection; // 2
 
     public function __construct(
-        private Serializer $serializer
+        private readonly Serializer $serializer
     ) {
         $this->connection = DriverManager::getConnection([
             'url' => self::CONNECTION_DSN,

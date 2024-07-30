@@ -5,7 +5,7 @@ namespace Hiring\Application\Model;
 class GetEmployeeNameQuery
 {
     public function __construct(
-        private int $employeeId
+        private readonly int $employeeId
     ) {
     }
 

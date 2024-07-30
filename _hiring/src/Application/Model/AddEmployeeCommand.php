@@ -5,8 +5,8 @@ namespace Hiring\Application\Model;
 class AddEmployeeCommand
 {
     public function __construct(
-        private int $employeeId,
-        private string $name
+        private readonly int $employeeId,
+        private readonly string $name
     ) {
     }
 
