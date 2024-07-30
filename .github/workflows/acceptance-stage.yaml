@@ -49,17 +49,17 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.1'
         is-php-experimental: [false]
         generate-coverage-report: [true]
         include:
-          - php: '8.1'
+          - php: '8.2'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.triggering-sha }}
 
@@ -77,14 +77,14 @@ jobs:
 
       - name: Cache PHP extensions
         if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
           key: ${{ steps.cache-php-extensions.outputs.key }}
           restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -99,7 +99,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -166,17 +166,17 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.1'
         is-php-experimental: [false]
         generate-coverage-report: [true]
         include:
-          - php: '8.1'
+          - php: '8.2'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.triggering-sha }}
 
@@ -194,14 +194,14 @@ jobs:
 
       - name: Cache PHP extensions
         if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
           key: ${{ steps.cache-php-extensions.outputs.key }}
           restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -216,7 +216,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -256,7 +256,7 @@ jobs:
 
       - name: Save integration coverage reports
         if: ${{ matrix.generate-coverage-report }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.integration-coverage-artifact-name.outputs.name }}
           path: ${{ env.INTEGRATION_TEST_CLOVER_FILENAME }}
@@ -268,7 +268,7 @@ jobs:
 
       - name: Save test doc reports
         if: ${{ matrix.generate-coverage-report }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.integration-test-doc-artifact-name.outputs.name }}
           path: ${{ env.INTEGRATION_TEST_DOC_FILENAME }}
@@ -298,20 +298,20 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.1'
         node:
           - '16.x'
         is-php-experimental: [ false ]
         generate-coverage-report: [ true ]
         include:
-          - php: '8.1'
+          - php: '8.2'
             node: '16.x'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.triggering-sha }}
 
@@ -329,14 +329,14 @@ jobs:
 
       - name: Cache PHP extensions
         if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
           key: ${{ steps.cache-php-extensions.outputs.key }}
           restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -351,7 +351,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -375,7 +375,7 @@ jobs:
           DATABASE_URL: postgresql://ci-db-user:ci-db-password@127.0.0.1:${{ job.services.pgsql.ports['5432'] }}/ci-db?serverVersion=13&charset=utf8
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "${{ matrix.node }}"
 
@@ -384,7 +384,7 @@ jobs:
       #        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       #
       #      - name: Cache Yarn
-      #        uses: actions/cache@v3
+      #        uses: actions/cache@v4
       #        with:
       #          path: ${{ steps.yarn-cache.outputs.dir }}
       #          key: ${{ runner.os }}-node-${{ matrix.node }}-yarn-${{ hashFiles('**/package.json **/yarn.lock') }}
@@ -419,7 +419,7 @@ jobs:
 
       - name: Save functional coverage reports
         if: ${{ matrix.generate-coverage-report }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.functional-coverage-artifact-name.outputs.name }}
           path: ${{ env.FUNCTIONAL_TEST_CLOVER_FILENAME }}
@@ -431,7 +431,7 @@ jobs:
 
       - name: Save test doc reports
         if: ${{ matrix.generate-coverage-report }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.functional-test-doc-artifact-name.outputs.name }}
           path: ${{ env.FUNCTIONAL_TEST_DOC_FILENAME }}
@@ -461,20 +461,20 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.1'
         node:
           - '16.x'
         is-php-experimental: [ false ]
         generate-coverage-report: [ true ]
         include:
-          - php: '8.1'
+          - php: '8.2'
             node: '16.x'
             is-php-experimental: true
             generate-coverage-report: false
       fail-fast: true
     steps:
       - name: Checkout on SHA-${{ inputs.triggering-sha }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.triggering-sha }}
 
@@ -492,14 +492,14 @@ jobs:
 
       - name: Cache PHP extensions
         if: ${{ env.USE_PHP_EXTENSION_CACHE  == '1' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.cache-php-extensions.outputs.dir }}
           key: ${{ steps.cache-php-extensions.outputs.key }}
           restore-keys: ${{ steps.cache-php-extensions.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.31.1
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.PHP_EXTENSIONS }}
@@ -514,7 +514,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: ${{ env.USE_COMPOSER_CACHE  == '1' }}
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -538,7 +538,7 @@ jobs:
           DATABASE_URL: postgresql://ci-db-user:ci-db-password@127.0.0.1:${{ job.services.pgsql.ports['5432'] }}/ci-db?serverVersion=13&charset=utf8
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "${{ matrix.node }}"
 
@@ -547,7 +547,7 @@ jobs:
       #        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       #
       #      - name: Cache Yarn
-      #        uses: actions/cache@v3
+      #        uses: actions/cache@v4
       #        with:
       #          path: ${{ steps.yarn-cache.outputs.dir }}
       #          key: ${{ runner.os }}-node-${{ matrix.node }}-yarn-${{ hashFiles('**/package.json **/yarn.lock') }}

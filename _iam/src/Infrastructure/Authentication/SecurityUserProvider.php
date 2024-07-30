@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class SecurityUserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
     public function __construct(
-        private QueryBus $queryBus
+        private readonly QueryBus $queryBus
     ) {
     }
 

@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserListController extends AbstractController
 {
     public function __construct(
-        private QueryBus $queryBus
+        private readonly QueryBus $queryBus
     ) {
     }
 

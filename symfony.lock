@@ -27,7 +27,7 @@
         "version": "1.0"
     },
     "doctrine/annotations": {
-        "version": "1.13",
+        "version": "2.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -178,9 +178,6 @@
     },
     "laminas/laminas-code": {
         "version": "4.5.1"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.5.0"
     },
     "lcobucci/clock": {
         "version": "2.1.0"
@@ -354,9 +351,6 @@
     },
     "sebastian/version": {
         "version": "3.0.2"
-    },
-    "stella-maris/clock": {
-        "version": "0.1.4"
     },
     "symfony/browser-kit": {
         "version": "v5.4.2"

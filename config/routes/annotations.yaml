@@ -1,10 +1,10 @@
 controllers:
-  resource: ../../src/Controller/
-  type: annotation
+    resource: ../../src/Controller/
+    type: annotation
 
 kernel:
-  resource: ../../src/Kernel.php
-  type: annotation
+    resource: ../../src/Kernel.php
+    type: annotation
 
 iam_api_controllers:
   resource: ../../_iam/src/Adapter/Api/
@@ -13,3 +13,8 @@ iam_api_controllers:
 hiring_api_controllers:
   resource: ../../_hiring/src/Adapter/Api/
   type: annotation
+
+Iam:
+    resource: ../../_iam/src/Adapter/Api/
+    type: annotation
+
