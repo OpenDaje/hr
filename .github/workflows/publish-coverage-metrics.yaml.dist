@@ -26,7 +26,7 @@ env:
 
 jobs:
   on-commit-stage-success:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Event - Commit Stage Success
     if: ${{ github.event.workflow.name == 'Commit stage' && github.event.workflow_run.conclusion == 'success' }}
     steps:
@@ -40,7 +40,7 @@ jobs:
 
 
   on-acceptance-stage-success:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Event - Acceptance Stage Success
     if: ${{ github.event.workflow.name == 'Acceptance stage' &&  github.event.workflow_run.conclusion == 'success' }}
     steps:
@@ -53,7 +53,7 @@ jobs:
         uses: crazy-max/ghaction-dump-context@v1
 
   triggering-workflow-info:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Triggering workflow info
     steps:
       - name: Checkout on branch ${{ github.event.workflow_run.head_branch }}|SHA-${{ github.event.workflow_run.head_commit.id }}
@@ -79,7 +79,7 @@ jobs:
 
   publish-unit-test-report:
     name: Publish unit test report
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [on-commit-stage-success]
     steps:
       - name: Checkout on branch ${{ github.event.workflow_run.head_branch }}|SHA-${{ github.event.workflow_run.head_commit.id }}
@@ -109,7 +109,7 @@ jobs:
 
   publish-integration-test-report:
     name: Publish integration test report
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [on-acceptance-stage-success]
     steps:
       - name: Checkout on branch ${{ github.event.workflow_run.head_branch }}|SHA-${{ github.event.workflow_run.head_commit.id }}
@@ -139,7 +139,7 @@ jobs:
 
   publish-functional-test-report:
     name: Publish functional test report
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [on-acceptance-stage-success]
     steps:
       - name: Checkout on branch ${{ github.event.workflow_run.head_branch }}|SHA-${{ github.event.workflow_run.head_commit.id }}
