@@ -22,7 +22,7 @@ env:
 
 jobs:
   on-commit-stage-success:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Event - Commit Stage Success
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
@@ -36,7 +36,7 @@ jobs:
 
 
   triggering-workflow-info:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Triggering workflow info
     steps:
       - name: Checkout on branch ${{ github.event.workflow_run.head_branch }}|SHA-${{ github.event.workflow_run.head_commit.id }}
@@ -62,7 +62,7 @@ jobs:
 
   app-preconditions-checks:
     name: App preconditions checks
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [on-commit-stage-success]
     timeout-minutes: 5
     services:
@@ -165,7 +165,7 @@ jobs:
 
   integration-test:
     name: Integration tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
@@ -280,7 +280,7 @@ jobs:
 
   functional-test:
     name: Functional tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
@@ -425,7 +425,7 @@ jobs:
 
   behat-test:
     name: Acceptance tests (behat)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - app-preconditions-checks
     timeout-minutes: 15
