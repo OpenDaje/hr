@@ -33,7 +33,7 @@ class SecurityApiLoginTest extends WebTestCase
 
         $data = json_decode($client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
+        $client->setServerParameter('HTTP_Authorization', \sprintf('Bearer %s', $data['token']));
 
         return $client;
     }
