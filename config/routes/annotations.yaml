@@ -6,6 +6,15 @@ kernel:
     resource: ../../src/Kernel.php
     type: annotation
 
+iam_api_controllers:
+  resource: ../../_iam/src/Adapter/Api/
+  type: annotation
+
+hiring_api_controllers:
+  resource: ../../_hiring/src/Adapter/Api/
+  type: annotation
+
 Iam:
     resource: ../../_iam/src/Adapter/Api/
     type: annotation
+
