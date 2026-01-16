@@ -1,6 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Property Hiring\\\\Application\\\\EcotoneQuickstart\\:\\:\\$queryBus is never read, only written\\.$#"
+			count: 1
+			path: _hiring/src/Application/EcotoneQuickstart.php
+
+		-
+			message: "#^Property Hiring\\\\Application\\\\EmployeesLoopQuickstart\\:\\:\\$queryBus is never read, only written\\.$#"
+			count: 1
+			path: _hiring/src/Application/EmployeesLoopQuickstart.php
+
+		-
+			message: "#^Property Hiring\\\\Application\\\\Model\\\\Employee\\:\\:\\$employeeId is never read, only written\\.$#"
+			count: 1
+			path: _hiring/src/Application/Model/Employee.php
+
+		-
 			message: "#^Property IdentityAccess\\\\Application\\\\Model\\\\Identity\\\\User\\:\\:\\$email is never read, only written\\.$#"
 			count: 1
 			path: _iam/src/Application/Model/Identity/User.php

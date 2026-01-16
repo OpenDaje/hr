@@ -35,6 +35,9 @@ services:
     IdentityAccess\:
         resource: '../_iam/src/'
 
+    Hiring\:
+        resource: '../_hiring/src/'
+
     Doctrine\DBAL\Connection:
         factory: ["Doctrine\\DBAL\\DriverManager","getConnection"]
         arguments:
@@ -48,3 +51,9 @@ services:
 #    Enqueue\Dbal\DbalConnectionFactory:
 #        factory: [ 'Ecotone\Dbal\DbalConnection', 'createForManagerRegistry' ]
 #        arguments: [ "@doctrine","default" ]
+
+    Enqueue\AmqpExt\AmqpConnectionFactory:
+        class: Enqueue\AmqpExt\AmqpConnectionFactory
+        arguments:
+            #- "amqp+lib://guest:guest@localhost:5672//"
+            - "amqp://rabbit-user:rabbit-password@mbroker:5672//"
